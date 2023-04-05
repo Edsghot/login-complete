@@ -30,6 +30,7 @@ export async function registerValidation(values){
     passwordVerify(errors, values);
     emailVerify(errors, values);
 
+    return errors;
 }
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -68,7 +69,7 @@ function emailVerify(error = {}, values) {
     }else if(values.email.includes(" ")){
         error.email = toast.error('Email incorrecto...!')
     }else if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)){
-        error.email = toast.error('direccion de email invalida...!')
+        error.email = toast.error('Direccion de email invalida...!')
     }
     return error;
 }
