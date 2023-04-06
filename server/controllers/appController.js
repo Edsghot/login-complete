@@ -1,6 +1,24 @@
 import UserModel from '../model/User.model.js'
 import bcrypt from 'bcrypt';
-import {Jwt} from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import ENV from '../config.js'
+
+/**midleware for verify user */
+
+export async function verifyUser(req, res, next) {
+    try {
+        const { username } = req.method == "GET" ? req.query : req.body;
+
+        // verificamos si existe el user
+        let exist = await UserModel.findOne({ username });
+        if (!exist) return register.status(404).send({ error: "Can't find User" });
+        next();
+
+    } catch (error) {
+        return res.status(404).send({ error: "Authentication Error" })
+    }
+}
+
 
 export async function register(req, res) {
     try {
@@ -36,38 +54,38 @@ export async function register(req, res) {
 }
 
 export async function login(req, res) {
-    const {username,password} = req.body;
+    const { username, password } = req.body;
 
-    try{
-        UserModel.findOne({username})
-            .then(user=>{
-                bcrypt.compare(password,user.password)
-                    .then(passwordCheck =>{
+    try {
+        UserModel.findOne({ username })
+            .then(user => {
+                bcrypt.compare(password, user.password)
+                    .then(passwordCheck => {
 
-                        if(!passwordCheck) return res.status(400).send({error: "Don't have Password"});
+                        if (!passwordCheck) return res.status(400).send({ error: "Don't have Password" });
 
                         //creando jwt token
-                        
+
                         const token = jwt.sign({
-                                        userId: user._id,
-                                        username: user.username
-                                      },'secret',{expiresIn : "24h"})
-                        
+                            userId: user._id,
+                            username: user.username
+                        }, ENV.JWT_SECRET, { expiresIn: "24h" })
+
                         return res.status(200).send({
                             msg: "login successful ...!",
                             username: user.username,
                             token
                         })
                     })
-                    .catch(error =>{
-                        return res.status(400).send({error: "password does not Match"})
+                    .catch(error => {
+                        return res.status(400).send({ error: "password does not Match" })
                     })
             })
-            .catch(error =>{
-                return res.status(404).send({error: "Username not Found"});
+            .catch(error => {
+                return res.status(404).send({ error: "Username not Found" });
             })
-    }catch(error){
-        return res.status(500).send({error})
+    } catch (error) {
+        return res.status(500).send({ error })
     }
 }
 
