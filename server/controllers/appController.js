@@ -58,7 +58,6 @@ export async function login(req, res) {
                             username: user.username,
                             token
                         })
-
                     })
                     .catch(error =>{
                         return res.status(400).send({error: "password does not Match"})
