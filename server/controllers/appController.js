@@ -11,7 +11,7 @@ export async function verifyUser(req, res, next) {
 
         // verificamos si existe el user
         let exist = await UserModel.findOne({ username });
-        if (!exist) return register.status(404).send({ error: "Can't find User" });
+        if (!exist) return res.status(404).send({ error: "Can't find User" });
         next();
 
     } catch (error) {
@@ -90,11 +90,48 @@ export async function login(req, res) {
 }
 
 export async function getUser(req, res) {
-    res.json('getUser route')
+    //recogemos como parametro el username
+    const {username} = req.params;
+    console.log("--->",username)
+    
+    try{
+
+        if(!username){
+            return res.status(501).send({error: "invalid username"})
+        }
+
+        const user = await UserModel.findOne({username})
+
+        return res.status(201).send(user);
+        
+    }catch(error){
+        return res.status(404).send({error: "Cannot Find user data"})
+    }
+
 }
 
 export async function updateUser(req, res) {
-    res.json('updateUser route')
+    try{
+
+        const {userId} = req.user;
+
+        if(userId){
+            const body = req.body;
+
+            UserModel.updateOne({_id:userId}, body, function(err,data){
+                if(err) throw err;
+                
+                return res.status(201).send({msg: "Actualizado correctamente ..:!"})
+            })
+
+
+        }else{
+            return res.status(401).send({error: "user not found"})
+        }
+
+    }catch(error){
+        return res.status(401).send({error})
+    }
 }
 
 export async function generateOTP(req, res) {

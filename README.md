@@ -17,6 +17,14 @@ npm install
 
 Antes de utilizar la aplicación, es necesario configurar algunas variables de entorno. Para ello, crea un archivo `.env` en la carpeta `Server` y agrega las siguientes variables:
 
+## Se crea una archivo dentro de la carpeta server
+
+config.js:
+
+export default{
+    JWT_SECRET: "ralbfDw55cReslKoeACfD81tnqfue0fPouoMVx6cNwk="
+}
+
 ## Uso
 
 Una vez que hayas instalado las dependencias y configurado las variables de entorno, puedes iniciar la aplicación ejecutando los siguientes comandos en cada una de las carpetas:
