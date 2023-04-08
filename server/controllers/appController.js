@@ -152,8 +152,12 @@ export async function verifyOTP(req, res) {
 
 export async function createResetSession(req, res) {
     if(req.app.locals.resetSession) {
-        
+        //permitiendo el acceso por una vez
+        req.app.locals.resetSession = false 
+        return res.status(201).send({msg: "Access granted"})
     }
+
+    return res.status(440).send({error: "Session expired"})
 }
 
 export async function resetPassword(req, res) {
