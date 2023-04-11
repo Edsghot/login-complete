@@ -7,7 +7,7 @@ import Auth,{localVariables} from "../middleware/auth.js";
 
 /*POST Methods*/
 router.route('/register').post(controller.register)
-//router.route('/registerMail').post();
+router.route('/registerMail').post();
 router.route('/authenticate').post((req,res)=>res.end());
 router.route('/login').post(controller.verifyUser,controller.login);
 
@@ -19,7 +19,7 @@ router.route('/createResetSession').get(controller.createResetSession) //RESetea
 
 /**PUT Methods s*/
 router.route('/updateuser').put(Auth,controller.updateUser)
-router.route('/resetPassword').put(controller.resetPassword)
+router.route('/resetPassword').put(controller.verifyUser,controller.resetPassword)
 
 
 export default router;
